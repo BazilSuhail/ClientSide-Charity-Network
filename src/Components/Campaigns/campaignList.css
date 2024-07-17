@@ -2,34 +2,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(252, 255, 252);
+    background-color: #073300;
     width: 100vw;
+    overflow-x: hidden;
 }
 
-.camp-heading { 
+.camp-heading {
     padding: 10px;
     text-align: center;
     margin: 10px auto;
-    border-radius: 10px; 
-    color: #174826;
-    font-size: xx-large;
+    border-radius: 10px;
+    color: #cbffda;
+    font-size: 35px;
     font-weight: 700;
 }
 
 .render-campaigns {
     display: flex;
     flex-wrap: wrap;
+    margin-top: -15px;
     justify-content: center;
+
 }
 
 .c-render {
+    margin-bottom: 15px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
     width: 95vw;
     margin-top: 25px;
     border-radius: 10px;
-    background-color: #caebcc;
+    background-color: #ffffffaf;
     box-shadow: 0px 0px 13px rgba(20, 45, 20, 0.715);
 }
 
@@ -43,9 +47,9 @@
 .c-title {
     text-align: center;
     border-radius: 10px;
-    background-color: #6b9a78;
-    font-size: 35px;
-    font-weight: 1000;
+    background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
+    font-size: 30px;
+    font-weight: 500;
     padding: 8px;
     width: 95%;
     color: #ffffff;
@@ -62,7 +66,7 @@
     padding: 10px;
     margin-top: 15px;
     width: 94%;
-    background-color: #00240a;
+    background: linear-gradient(-45deg, #033900e4, #002b02, #033900e4);
     color: #b9cebf;
 }
 
@@ -80,16 +84,17 @@
     border-radius: 15px;
     font-size: larger;
     padding: 6px;
-    background-color: #2f4e00;
+    background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
 }
 
 .cont-loc {
-    color: #2f4e00;
-    background-color: #85dc9e;
-    font-size: larger;
+    color: #004101;
+    background-color: #ffffffbe;
+    font-size: large;
     font-weight: bold;
     border-radius: 15px;
-    padding: 6px 26px;
+    padding: 3px 24px;
+    margin: 4px 0px;
 }
 
 .franchise-props-values {
@@ -143,7 +148,7 @@
     align-items: center;
     height: 83%;
     width: 95%;
-    background-color: #345b3fdc;
+    background: linear-gradient(-45deg, #002b02b1, #033700e4, #002b02a5);
     border-radius: 9px;
     padding: 6px;
 }
@@ -283,7 +288,7 @@
     font-weight: 600;
     border: 3px #447d54 solid;
     padding: 8px;
-    background-color: #447d54;
+    background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
 }
 
 .c-donations::placeholder {
@@ -307,11 +312,11 @@
 }
 
 .c-loader {
-    width: 25%;
+    width: 22%;
     height: 55px;
     margin-left: 10px;
     margin-top: 20px;
-    background-color: #03581b;
+    background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
     align-self: center;
     color: #00b533;
     text-align: center;
@@ -333,10 +338,6 @@
 
 
 @media (max-width: 1100px) {
-
-    .campaign {
-        width: 102vw;
-    }
 
     .c-render {
         display: grid;

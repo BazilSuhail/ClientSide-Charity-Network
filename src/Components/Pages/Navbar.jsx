@@ -148,8 +148,7 @@ const Navbar = () => {
         <NavLink to="/" className="nav-links"  >Home</NavLink>
         <NavLink to="/gallery" className="nav-links"  >Gallery</NavLink>
         <NavLink to="/listedprojects" className="nav-links"  >Projects</NavLink>
-        <NavLink to="/listcampaigns" className="nav-links"  >Campaigns</NavLink>
-        {renderFeedback(userType)}
+        <NavLink to="/listcampaigns" className="nav-links"  >Campaigns</NavLink> 
       </div>
       <div className="auth-links">
         {renderAuthLinks()}

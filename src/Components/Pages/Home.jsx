@@ -10,11 +10,52 @@ import { useTypewriter, Cursor } from 'react-simple-typewriter';
 
 import "./testimonialCarousel.css";
 
-import { motion, useTransform, useScroll } from 'framer-motion';
+//import { motion, useTransform, useScroll } from 'framer-motion';
 
 import { Link } from "react-router-dom";
 import { HiCubeTransparent, HiOutlineHeart, HiOutlineBadgeCheck, HiOutlineCurrencyDollar, HiOutlineUsers, HiOutlineLightBulb } from 'react-icons/hi';
 
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+
+const ChooseUsItem = ({ index, item }) => {
+  const renderIcon = (index) => {
+    switch (index) {
+      case 0:
+        return <HiCubeTransparent className='choose-icon' />;
+      case 1:
+        return <HiOutlineHeart className='choose-icon' />;
+      case 2:
+        return <HiOutlineBadgeCheck className='choose-icon' />;
+      case 3:
+        return <HiOutlineCurrencyDollar className='choose-icon' />;
+      case 4:
+        return <HiOutlineUsers className='choose-icon' />;
+      case 5:
+        return <HiOutlineLightBulb className='choose-icon' />;
+      default:
+        return null;
+    }
+  };
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  return (
+    <motion.div
+      ref={ref}
+      className="choose-div"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
+      transition={{ duration: 1 }}
+    >
+      <h3 className="choose-div-heading">
+        {renderIcon(index)} {item.heading}
+      </h3>
+      <p className="choose-body">{item.body}</p>
+    </motion.div>
+  );
+};
 
 const chooseUsData = [
   {
@@ -46,12 +87,6 @@ const chooseUsData = [
 const Home = () => {
 
   const [franchises, setFranchises] = useState([]);
-
-
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0.28, 0.36], [0, 1]);
-  const scale = useTransform(scrollYProgress, [0.28, 0.36], [0.8, 1]);
-  const y = useTransform(scrollYProgress, [0.28, 0.36], [20, 0]);
 
   useEffect(() => {
 
@@ -106,24 +141,7 @@ const Home = () => {
     typeSpeed: 120,
     deleteSpeed: 50
   });
-  const renderIcon = (index) => {
-    switch (index) {
-      case 0:
-        return <HiCubeTransparent className='choose-icon' />;
-      case 1:
-        return <HiOutlineHeart className='choose-icon' />;
-      case 2:
-        return <HiOutlineBadgeCheck className='choose-icon' />;
-      case 3:
-        return <HiOutlineCurrencyDollar className='choose-icon' />;
-      case 4:
-        return <HiOutlineUsers className='choose-icon' />;
-      case 5:
-        return <HiOutlineLightBulb className='choose-icon' />;
-      default:
-        return null;
-    }
-  };
+
   return (
     <div className="home">
 
@@ -165,7 +183,7 @@ const Home = () => {
         />
       </section>
 
-      <p className="aboutheading"  >Welcome To إيثار</p>
+      <p className="bg-custom-gradient text-[35px] text-white py-[6px] font-bold rounded-2xl text-center" >Welcome To إيثار</p>
       {/*about section*/}
       <section className="about">
         <div className="abouttext">
@@ -182,23 +200,14 @@ const Home = () => {
         </div>
         <div className="choose-container">
           {chooseUsData.map((item, index) => (
-            <motion.div
-              className="choose-div"
-              style={{ scale, y, opacity }}
-              key={index}
-            >
-              <h3 className="choose-div-heading">
-              {renderIcon(index)} {item.heading}</h3>
-              <p className="choose-body">{item.body}</p>
-            </motion.div>
+            <ChooseUsItem key={index} index={index} item={item} />
           ))}
         </div>
       </section>
 
-
-
       {/*Franchises */}
-      <p className="aboutheading" >Active Franchises</p>
+      <p className="text-green-900 mt-[15px] text-[45px] py-[6px] font-bold text-center">Active Franchises</p>
+      <div className='h-[5px] rounded-2xl w-[95vw] bg-green-800 mx-auto my-[15px]'></div>
       <section className="back">
         <div className="table-container">
           <table className="table-body">
@@ -223,8 +232,8 @@ const Home = () => {
       </section>
       {/*Testimonial */}
 
-      <p className="otherheading">Top Donor's Testimonials</p>
-      <div className="testimonial-carousel-container">
+      <p className="bg-custom-gradient mt-[25px] lg:mt-[35px] text-[35px] text-white py-[6px] font-bold rounded-2xl text-center">Top Donor's Testimonials</p>
+      <section className="testimonial-carousel-container">
         <div className="testimonial-carousel-wrapper">
           <div className="testimonial-carousel">
             {testimonials.map((testimonial, index) => (
@@ -253,31 +262,9 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </div>
-      {
-        /*
-        
-      <div className="testimonial-carousel-container">
-        <Carousel showArrows={true} showThumbs={false} infiniteLoop={true} autoPlay={true} interval={10000}>
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="testimonial-item">
-              <FaQuoteLeft className='left-comma' />
-              <div className="testimonial-feedback"><b>{testimonial.feedback}</b></div>
-              <FaQuoteRight className='right-comma' />
-              <div className="testimonial-info">
-                <div className="testimonial-name">{testimonial.displayName}</div>
-                <div className="testimonial-email">{testimonial.email}</div>
-              </div>
-            </div>
-          ))}
-        </Carousel>
-      </div>
-        */
-      }
+      </section>
 
-      {/*Continue*/}
-
-      <p className="aboutheading" >Let's Get Involved</p>
+      <p className="bg-custom-gradient text-[35px] text-white py-[6px] font-bold rounded-2xl text-center" >Let's Get Involved</p>
       <div className="continue">
         <p className='getinvolve'>There are many ways to support our cause. Choose how you'd like to make a difference today:</p>
         <Link to="/signup" className="navButton">Donate Now</Link>

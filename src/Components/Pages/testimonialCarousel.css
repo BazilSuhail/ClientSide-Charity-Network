@@ -11,12 +11,13 @@
   justify-content: center;
   align-items: center;  
   height: 400px;
-  width: 100%;
+  width: 85%;
+  margin: 0px auto;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   scrollbar-color: white;
-  padding-left: 80px;
+  padding-left: 180px;
   /* Hide scrollbar for Firefox */
   -ms-overflow-style: none;
   /* Hide scrollbar for IE and Edge */
@@ -35,7 +36,7 @@
   margin-right: 20px;
   /* Margin between cards */
   padding: 20px;
-  background: linear-gradient(45deg, #d4ffd6, #7edc77, #d4ffd6);
+  background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
   /* Light greenish background */
   box-shadow: 1px 1px 5px green;
   border-radius: 8px;
@@ -49,19 +50,19 @@
 .left-comma,
 .right-comma {
   font-size: 24px;
-  color: #004202;
+  color: rgb(160, 254, 139);
   /* Green color for commas */
 }
 
 .testimonial-feedback {
   margin: 12px 0;
   font-size: 16px;
-  color: #004202;
+  color: white;
   /* Dark text color */
 }
 
 .testimonial-info {
-  color: #004202;
+  color: white;
   /* Grayish text color */
 }
 
@@ -74,7 +75,7 @@
 .testimonial-email {
   font-size: 18px;
   font-weight: 500;
-  color: #004202;
+  color: white;
   /* Lighter text color for email */
 }
 

@@ -42,7 +42,7 @@ const CampaignComp = ({ campaign, handleDonate, userInDonorsCollection }) => {
         <div className='c-render'>
 
             <div className="camp-details">
-                <div className='c-title'>{campaign.name}</div>
+                <div className='c-title'>{campaign.title}</div>
                 <div className='c-franchise'>Regulating Franchise : <div className="franchise-name">{franchiseTitle}</div></div>
 
                 <div className="franchise-props">

@@ -1,5 +1,6 @@
 .gallery {
     margin: 0;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -63,7 +64,7 @@
     color: #ffffff;
     padding: 20px;
     height: 95vh;
-    width: 97vw;
+    width: 100vw;
 }
 
 .donate-for-afterlife {
@@ -93,6 +94,7 @@
 
 .how-to-help {
     margin-top: 140px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -178,39 +180,33 @@
 
 .volunteer-header {
     border: 3px #003807e4 solid;
-    font-size: 22px;
-    background-color: #e5ffec;
+    font-size: 22px; 
     color: #002b0c;
     margin: 5px;
 }
 
 
-.volunteer-row-1 {
-    border: 12px #ffffff solid;
+.volunteer-row-1 { 
     font-size: 22px;
     background-color: #002b0c;
 }
 
-.volunteer-row-2 {
-    border: 12px #ffffff solid;
+.volunteer-row-2 { 
     font-size: 22px;
     background-color: #003f11 !important;
 }
 
-.volunteer-row-3 {
-    border: 12px #ffffff solid;
+.volunteer-row-3 { 
     font-size: 22px;
     background-color: #175d2b;
 }
 
-.volunteer-row-4 {
-    border: 12px #ffffff solid;
+.volunteer-row-4 { 
     font-size: 22px;
     background-color: #28663b !important;
 }
 
-.volunteer-row-5 {
-    border: 12px #ffffff solid;
+.volunteer-row-5 { 
     font-size: 22px;
     background-color: #4ba46c;
 }
@@ -222,17 +218,17 @@
         grid-template-rows: 1fr 1fr;
         height: 105vh;
         font-size: medium;
-        width: 97vw;
+        width: 100vw;
         padding: 12px;
     }
 
     .donate-for-afterlife {
-        margin-top: 20px;
+        margin-top: 50px;
         padding: 10px;
     }
 
     .charity-header {
-        font-size: 65px;
+        font-size: 55px;
     }
 
     .charity-content {
@@ -242,7 +238,7 @@
     }
 
     .how-to-help {
-        margin-top: -35px;
+        margin-top: 10px;
     }
 
     .svg-container {

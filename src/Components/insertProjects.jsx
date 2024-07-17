@@ -144,7 +144,7 @@ const AddDummyDataToFirestore = () => {
         const batch = fs.batch();
 
         dummyData.forEach((data) => {
-            const docRef = fs.collection("projects").doc();
+            const docRef = fs.collection("campaigns").doc();
             batch.set(docRef, data);
         });
 

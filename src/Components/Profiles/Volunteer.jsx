@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, fs } from "../../Config/Config";
-import Footer from "../Pages/Footer"; 
-import "./donor.css";
+import { auth, fs, st } from "../../Config/Config"; // Import st
+import Footer from "../Pages/Footer";
 import "../Styles/tables.css";
-import "../Styles/form.css";
 
 const Volunteer = () => {
   const navigate = useNavigate();
@@ -12,6 +10,7 @@ const Volunteer = () => {
   const [editMode, setEditMode] = useState(false);
   const [projects, setProjects] = useState([]);
   const [appliedProjects, setAppliedProjects] = useState([]);
+  const [image, setImage] = useState(null); // State to store image
 
   const [formData, setFormData] = useState({
     displayName: "",
@@ -21,6 +20,7 @@ const Volunteer = () => {
     dob: "",
     cnic: "",
     idtype: "Volunteer",
+    photoURL: "" // Add photoURL to formData
   });
 
   useEffect(() => {
@@ -73,11 +73,15 @@ const Volunteer = () => {
     return unsubscribe; // Cleanup function to unsubscribe from the auth state listener
   }, []);
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
   };
 
   const handleEdit = () => {
@@ -89,9 +93,18 @@ const Volunteer = () => {
     try {
       const currentUser = auth.currentUser;
       if (currentUser) {
-        await fs.collection("volunteer").doc(currentUser.uid).update(formData);
-        setVolunteerData(formData);
-        console.log(volunteerData);
+        let photoURL = formData.photoURL;
+        if (image) {
+          const storageRef = st.ref();
+          const imageRef = storageRef.child(`volunteerImages/${currentUser.uid}`);
+          await imageRef.put(image);
+          photoURL = await imageRef.getDownloadURL();
+        }
+        const updatedData = { ...formData, photoURL };
+
+        await fs.collection("volunteer").doc(currentUser.uid).update(updatedData);
+        setVolunteerData(updatedData);
+        setFormData(updatedData);
         setEditMode(false);
       }
     } catch (error) {
@@ -102,140 +115,180 @@ const Volunteer = () => {
   const handle_proposal = () => {
     navigate('/AppliedProject');
   };
+
+  const handle_complains = () => {
+    navigate('/complains');
+  };
+
   return (
-    <div className='donor'>
-      <div className="headings">Volunteer Information </div>
+    <main className='w-screen h-[95vh] overflow-x-hidden'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 mt-[20px]'>
 
-      {editMode ? (
-        <div className='form'>
-          <form className="formData" onSubmit={handleSubmit}>
+        <div className='flex flex-col p-[30px]'>
+          {volunteerData.photoURL ? (
+            <img src={volunteerData.photoURL} alt="Profile" className='w-[300px] rounded-full h-[300px] mx-auto lg:ml-[15px]' />
+          ) : (
+            <div className='w-[300px] rounded-full h-[300px] ml-[15px] bg-green-900'></div>
+          )}
+          <div className='text-[40px] text-green-900 mx-auto lg:ml-[15px] font-extrabold'>Welcome, <span className='font-bold text-[60px] text-green-700'>{volunteerData.displayName}</span></div>
+          <div className='mx-auto lg:ml-[15px] text-md xl:text-lg'>Your contributions are making a difference. Explore your projects and proposals.</div>
 
-            <div className='attribute'>Name: </div>
-            <input type="text" name="displayName" value={formData.displayName} onChange={handleChange} />
-            <div className='attribute'>Email:</div>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} />
-            <div className='attribute'>Phone Number: </div>
-            <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
-            <div className='attribute'>Address: </div>
-            <input type="text" name="address" value={formData.address} onChange={handleChange} />
-            <div className='attribute'>Date of Birth: </div>
-            <input type="date" name="dob" value={formData.dob} onChange={handleChange} />
-            <div className='attribute'>CNIC: </div>
-            <input type="text" name="cnic" value={formData.cnic} onChange={handleChange} />
-
-            <button className='save' type="submit">Save</button>
-          </form>
-        </div>
-      ) :
-        (
-          <>
-            <div className='props'>
-              <div className='attributes'>Name: </div>
-              <div className='values'>{volunteerData.displayName}</div>
-              <div className='attributes'>Email:</div>
-              <div className='values'>{volunteerData.email}</div>
-
-              <div className='attributes'>Phone Number: </div>
-              <div className='values'>{!volunteerData.phoneNumber
-                ? (<div className='values-placeholder'>Enter your bio</div>)
-                : (<div>{volunteerData.phoneNumber}</div>)}
-              </div>
-
-              <div className='attributes'>Address: </div>
-              <div className='values'>{!volunteerData.address
-                ? (<div className='values-placeholder'>Enter your bio</div>)
-                : (<div>{volunteerData.address}</div>)}
-              </div>
-
-              <div className='attributes'>Date of Birth: </div>
-              <div className='values'>{!volunteerData.dob
-                ? (<div className='values-placeholder'>Enter your bio</div>)
-                : (<div>{volunteerData.dob}</div>)}
-              </div>
-
-              <div className='attributes'>CNIC:</div>
-              <div className='values'>{!volunteerData.cnic
-                ? (<div className='values-placeholder'>Enter your bio</div>)
-                : (<div>{volunteerData.cnic}</div>)}
-              </div>
-
-
-              <button className='edit-btn' onClick={handleEdit}>Edit Info</button>
-              <button className='proposal' onClick={handle_proposal}>Propose a Project</button>
-
+          
+          <div className='flex lg:flex-row mt-[10px] flex-col mx-auto lg:ml-[15px]'>
+              <button
+                onClick={handle_proposal}
+                className="  bg-green-900 font-medium w-[235px] text-white py-2  rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                Apply for a Project
+              </button>
+              <button
+                onClick={handle_complains}
+                className="lg:ml-[15px] mt-[10px] lg:mt-[0px] w-[234px] text-green-900 font-medium border-2 border-green-900 bg-white py-2 rounded-xl hover:text-white hover:bg-green-700 transition-colors duration-200"
+              >
+                Register Complain
+              </button>
             </div>
-
-          </>
-        )}
-
-      {projects.length > 0 && (
-        <div>
-
-          <div className="back">
-            <div className="headings">Project </div>
-            <div className="table-container">
-              <table className="table-body">
-                <thead className="head">
-                  <tr>
-                    <th>Title</th>
-                    <th>Target Amount</th>
-                    <th>Collected Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-
-                <tbody className="body">
-                  {projects.map((project, index) => (
-                    <tr key={index}>
-                      <td>{project.title}</td>
-                      <td>{project.targetAmount}</td>
-                      <td>{project.collectedAmount}</td>
-                      <td>{project.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-      )}
 
-      {appliedProjects.length > 0 && (
-        <div>
-          <div className="back">
-            <div className="headings">Applied Projects </div>
-            <div className="table-container">
-              <table className="table-body">
-                <thead className="head">
-                  <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Target Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody className="body">
-                  {appliedProjects.map((project) => (
-                    <tr key={project.id}>
-                      <td>{project.title}</td>
-                      <td>{project.description}</td>
-                      <td>{project.startDate}</td>
-                      <td>{project.endDate}</td>
-                      <td>{project.targetAmount}</td>
-                      <td>{project.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="m-[20px] p-[20px] w-[95%] flex flex-col">
+          {editMode ? (
+            <div>
+              <form onSubmit={handleSubmit}>
+                <div className="text-green-900 font-extrabold text-2xl mb-4">Edit your Profile</div>
+                <div className="text-lg font-semibold mb-2">Name:</div>
+                <input
+                  className="text-green-700 w-[100%] font-medium border-2 border-green-950 rounded-[5px] text-2xl p-[5px] mb-4"
+                  type="text"
+                  name="displayName"
+                  value={formData.displayName}
+                  onChange={handleChange}
+                /> 
+                <div className="text-lg font-semibold mb-2">Phone Number:</div>
+                <input
+                  className="text-green-700 w-[100%] font-medium border-2 border-green-950 rounded-[5px] text-2xl p-[5px] mb-4"
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                />
+                <div className="text-lg font-semibold mb-2">Address:</div>
+                <input
+                  className="text-green-700 w-[100%] font-medium border-2 border-green-950 rounded-[5px] text-2xl p-[5px] mb-4"
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+                <div className="text-lg font-semibold mb-2">Date of Birth:</div>
+                <input
+                  className="text-green-700 font-medium border-2 border-green-950 w-[100%] rounded-[5px] text-2xl p-[5px] mb-4"
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleChange}
+                />
+                <div className="text-lg font-semibold mb-2">CNIC:</div>
+                <input
+                  className="text-green-700 w-[100%] font-medium border-2 border-green-950 rounded-[5px] text-2xl p-[5px] mb-4"
+                  type="text"
+                  name="cnic"
+                  value={formData.cnic}
+                  onChange={handleChange}
+                />
+                <div className="text-lg font-semibold mb-2">Upload Picture:</div>
+                <input
+                  className="text-green-700 font-medium rounded-[5px] text-md p-[5px] mb-4"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+                <button
+                  type="submit"
+                  className="w-[105px] bg-green-900 text-xl font-medium text-white py-[4px] px-4 rounded-lg hover:bg-green-700 transition-colors duration-200"
+                >
+                  Save
+                </button>
+              </form>
             </div>
-          </div>
+          ) : (
+            <div>
+              <div className="text-green-900 font-extrabold text-2xl mb-4">Volunteer's Profile</div>
+              <div className="text-lg font-semibold">Email:</div>
+              <div className="text-green-700 rounded-lg p-[5px] border-2 border-green-950 w-[100%]  font-medium mb-4 text-2xl">{volunteerData.email}</div>
+              <div className="text-lg font-semibold">Phone Number:</div>
+              <div className="text-green-700 rounded-lg p-[5px] border-2 border-green-950 w-[100%]  font-medium mb-4 text-2xl">{volunteerData.phoneNumber}</div>
+              <div className="text-lg font-semibold">Address:</div>
+              <div className="text-green-700 rounded-lg p-[5px]  border-2 border-green-950 w-[100%] font-medium mb-4 text-2xl">{volunteerData.address}</div>
+              <div className="text-lg font-semibold">Date of Birth:</div>
+              <div className="text-green-700 rounded-lg p-[5px] border-2 border-green-950 w-[100%]  font-medium mb-4 text-2xl">{volunteerData.dob}</div>
+              <div className="text-lg font-semibold">CNIC:</div>
+              <div className="text-green-700 rounded-lg p-[5px]  border-2 border-green-950 w-[100%] font-medium mb-4 text-2xl">{volunteerData.cnic}</div>
+              <button
+                onClick={handleEdit}
+                className="bg-green-900 text-xl font-medium w-[120px] text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                Edit Profile
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+      <div className="h-[4px] rounded-xl mx-auto w-[95vw] bg-custom-gradient"></div>
+
+      <div className="m-[30px]">
+        <h2 className="text-[35px] font-bold mb-4 text-green-900">Ongoing Projects</h2>
+        <div className="overflow-x-auto max-w-full bg-green-100 rounded-lg shadow-md">
+          <table className="w-full border-none table-auto">
+            <thead className="bg-custom-gradient text-white">
+              <tr>
+                <th className="px-4 py-2">Project Name</th>
+                <th className="px-4 py-2">Description</th>
+                <th className="px-4 py-2">Start Date</th>
+                <th className="px-4 py-2">End Date</th>
+                <th className="px-4 py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {projects.map((project, index) => (
+                <tr key={index} className="bg-green-50 even:bg-green-200">
+                  <td className="text-center whitespace-nowrap font-bold px-4 py-2">{project.title}</td>
+                  <td className="text-center md:text-md font-medium text-sm  px-4 py-2">{project.description}</td>
+                  <td className="text-center px-4 py-2">{project.startDate}</td>
+                  <td className="text-center px-4 py-2">{project.endDate}</td>
+                  <td className="flex"><span  className="mx-auto font-bold px-[15px] justify-center p-[5px] my-[5px] rounded-xl bg-green-600 text-white ">{project.status}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="m-[30px]">
+        <h2 className="text-[35px] font-bold mb-4 text-green-900">Applied Projects</h2>
+        <div className="overflow-x-auto max-w-full bg-green-100 rounded-lg shadow-md">
+          <table className="w-full table-auto">
+            <thead className="bg-custom-gradient text-white">
+              <tr>
+                <th className="px-4 py-2">Project Name</th>
+                <th className="px-4 py-2">Description</th>
+                <th className="px-4 py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {appliedProjects.map((project) => (
+                <tr key={project.id} className="bg-green-50 even:bg-green-200">
+                  <td className="text-center font-bold px-4 py-2">{project.title}</td>
+                  <td className="text-center  px-4 py-2">{project.description}</td>
+                  <td className="flex "><span className="mx-auto font-bold px-[15px] justify-center p-[5px] my-[5px] rounded-xl bg-yellow-600 text-white ">Pending</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
 
       <Footer />
-    </div>
+    </main>
   );
 };
 

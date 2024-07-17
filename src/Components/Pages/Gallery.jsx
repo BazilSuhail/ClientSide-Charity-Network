@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { fs } from '../../Config/Config';
 import Footer from "../Pages/Footer";
 //import TopVolunteers from './topVolunteers'; // Import the TopVolunteers component
-
-import Loader from '../Loader';
+ 
 import "../Styles/tables.css";
 import "./gallery.css";
 import "../Styles/tables.css";
 import Svg1 from '../Styles/photos/charitycup.svg';
 import Svg2 from '../Styles/photos/karekamal.svg';
+import { BsFillAwardFill } from 'react-icons/bs';
+
 import Svg3 from '../Styles/photos/unicef.svg';
 import Svg4 from '../Styles/photos/sundas.svg';
 import Svg5 from '../Styles/photos/local.svg';
@@ -114,8 +115,7 @@ const Gallery = () => {
 
     // -------->  *Other code for showing top VOlunteers
 
-    const [topVolunteers, setTopVolunteers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [topVolunteers, setTopVolunteers] = useState([]); 
 
     useEffect(() => {
         const fetchVolunteers = async () => {
@@ -142,9 +142,7 @@ const Gallery = () => {
                 await batch.commit();
             } catch (error) {
                 console.error('Error fetching top volunteers:', error.message);
-            } finally {
-                setLoading(false);
-            }
+            } 
         };
 
         fetchVolunteers();
@@ -179,7 +177,7 @@ const Gallery = () => {
                 </div>
             </div>
 
-            <p className="statheading">Generosity in Action</p>
+            <p className=" text-[35px] text-linear-gradient py-[6px] font-bold my-[18px] rounded-2xl text-center">Generosity in Action</p>
             <div className="donation-stats">
                 <div className="card">
                     <div className="title">Overall Donations</div>
@@ -194,7 +192,7 @@ const Gallery = () => {
                     <AnimatedCounter value={campDonations} duration={20} start={10} incrementByHundred={true} val={2000} />
                 </div>
             </div>
-            <p className="logos-heading">Our Honourable Partners</p>
+            <p className="bg-custom-gradient text-[35px] text-white py-[6px] font-bold my-[18px] rounded-2xl text-center">Our Honourable Partners</p>
             <div className="svg-container">
                 <img src={Svg1} alt="SVG 1" className="animated-svg" />
                 <img src={Svg2} alt="SVG 2" className="animated-svg" />
@@ -203,7 +201,7 @@ const Gallery = () => {
                 <img src={Svg5} alt="SVG 5" className="animated-svg" />
             </div>
 
-            <p className="statheading">Our Work</p>
+            <p className="bg-custom-gradient text-[35px] text-white py-[6px] font-bold my-[18px] rounded-2xl text-center">Our Work</p>
             <div className="stats">
                 <div className="card">
                     <div className="title">Total Franchises</div>
@@ -231,50 +229,53 @@ const Gallery = () => {
                 </div>
             </div>
 
-            <p className="logos-heading">Top Volunteers</p>
-            {loading ? (
-                <Loader typeOfloader={"a"} />
-            ) : (
-                <div className="top-volunteers">
-                    <div className="table-container">
-                        <table className="table-body">
-                            <thead className="head">
-                                <tr className='volunteer-header'>
-                                    <th>Rank</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Projects Completed</th>
+            <div className="w-[95vw] mx-auto px-4 py-8">
+                <h2 className="text-[38px] font-bold mb-[25px]">Top Volunteers</h2>
+                <div className="overflow-x-auto">
+                    <table className="w-[95vw] bg-white shadow-md rounded-lg overflow-hidden" style={{ borderCollapse: 'collapse' }}>
+                        <thead className="bg-gray-200">
+                            <tr className='text-xl'>
+                                <th className="py-2 px-4 text-left ">Rank</th>
+                                <th className="py-2 px-4 text-center">Name</th>
+                                <th className="py-2 px-4 text-center ">Phone Number</th>
+                                <th className="py-2 whitespace-nowrap px-4 text-center ">Projects Completed</th>
+                            </tr>
+                        </thead>
+                        <tbody className='text-white'>
+                            {topVolunteers.map((volunteer, index) => (
+                                <tr key={index} className={`volunteer-row-${index + 1}`}>
+                                    <td className="py-2 px-4 text-[25px] flex items-center">
+                                        <BsFillAwardFill className="text-yellow-500 mr-2" />
+                                        {index + 1}
+                                    </td>
+                                    <td className="py-2 px-4 text-center">
+                                        {!volunteer.displayName ? (
+                                            <div className="text-green-200 whitespace-nowrap">Info Not entered</div>
+                                        ) : (
+                                            <div>{volunteer.displayName}</div>
+                                        )}
+                                    </td>
+                                    <td className="py-2 px-4  text-center">
+                                        {!volunteer.phoneNumber ? (
+                                            <div className="text-green-200 whitespace-nowrap">Info Not entered</div>
+                                        ) : (
+                                            <div>{volunteer.phoneNumber}</div>
+                                        )}
+                                    </td>
+                                    <td className="py-2 px-4 text-center ">
+                                        {!volunteer.Projectscompleted ? (
+                                            <div className="text-gray-500 whitespace-nowrap">Info Not entered</div>
+                                        ) : (
+                                            <div>{volunteer.Projectscompleted}</div>
+                                        )}
+                                    </td>
                                 </tr>
-                            </thead>
-
-                            <tbody className="body">
-                                {topVolunteers.map((volunteer, index) => (
-                                    <tr key={index} className={`volunteer-row-${index + 1}`}>
-                                        <td>{index + 1}</td>
-
-                                        <td>{!volunteer.displayName
-                                            ? (<div >Info Not entered</div>)
-                                            : (<div>{volunteer.displayName}</div>)}
-                                        </td>
-
-                                        <td>{!volunteer.phoneNumber
-                                            ? (<div >Info Not entered</div>)
-                                            : (<div>{volunteer.phoneNumber}</div>)}
-                                        </td>
-
-                                        <td>{!volunteer.Projectscompleted
-                                            ? (<div >Info Not entered</div>)
-                                            : (<div>{volunteer.Projectscompleted}</div>)}
-                                        </td>
- 
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div> 
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
-            )}
 
             <Footer />
         </div>

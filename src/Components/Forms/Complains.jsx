@@ -91,11 +91,11 @@ const Complains = () => {
       <form className="complain-form" onSubmit={handleSubmit}>
 
         <div className="complain-title">Title: </div>
-        <input className="comp-title" type="text" placeholder="Enter Title of your Complain" name="title" value={complainData.title} onChange={handleChange} required />
+        <input className="border-2 border-green-800 rounded-md p-[5px] placeholder:font-bold" type="text" placeholder="Enter Title of your Complain" name="title" value={complainData.title} onChange={handleChange} required />
 
         <div className="complain-title">Complain: </div>
         <textarea className="comp-desc" name="complain" placeholder="Enter Your Complain" value={complainData.complain} onChange={handleChange} required />
- 
+
         <button className="submit-complain" type="submit">Submit Complain</button>
       </form>
 
@@ -105,24 +105,17 @@ const Complains = () => {
       </button>
 
       {showTable && (
-        <div className="table-container">
-          <table className="table-body">
-            <thead className="head">
-              <tr>
-                <th>Title</th>
-                <th>Complain</th>
-              </tr>
-            </thead>
-            <tbody className="body">
-              {complains.map((complain, index) => (
-                <tr key={index}>
-                  <td>{complain.title}</td>
-                  <td>{complain.complain}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {complains.map((complain, index) => (
+            <div key={index} className="bg-custom-gradient shadow-md rounded-lg overflow-hidden">
+              <div className="p-4">
+                <h3 className="text-xl text-red-200 font-semibold">{complain.title}</h3>
+                <p className="text-green-100 p-[5px] border-2 border-green-200 rounded-md mt-2">{complain.complain}</p>
+              </div>
+            </div>
+          ))}
         </div>
+
       )}
     </div>
 

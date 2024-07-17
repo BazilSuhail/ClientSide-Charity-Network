@@ -1,11 +1,13 @@
 .home {
   display: flex;
   flex-direction: column;
+
+  overflow-x: hidden;
 }
 
 .cover {
   padding: 30px;
-  height: 495px;
+  height: 680px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -44,7 +46,7 @@
   text-align: center;
   color: #ffffff;
   border-radius: 15px;
-  background-color: rgb(0, 83, 37);
+  background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
   margin-bottom: 5px;
 }
 
@@ -70,29 +72,6 @@
   100% {
     border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
   }
-}
-
-
-.aboutheading {
-  font-size: 35px;
-  background-color: rgb(48, 85, 55);
-  font-weight: 900;
-  color: rgb(255, 255, 255);
-  padding: 10px;
-  width: 98.4vw;
-  border-radius: 50px;
-  text-align: center;
-}
-
-.otherheading {
-  font-size: 35px;
-  border: 3px solid rgb(48, 85, 55);
-  font-weight: 800;
-  color: rgb(48, 85, 55);
-  padding: 10px;
-  width: 98.4vw;
-  border-radius: 50px;
-  text-align: center;
 }
 
 .about {
@@ -121,7 +100,7 @@
 
 /* ----------------- */
 .choose-us {
-  background-color: #073300;
+  background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
   margin-top: 35px;
   padding-bottom: 20px;
 }
@@ -134,7 +113,6 @@
 .choose-heading {
   font-size: 45px;
   font-weight: 800;
-  background-color: #073300;
   color: white;
   padding: 15px;
   margin: 0px auto;
@@ -257,7 +235,7 @@
 .title {
   text-align: center;
   margin-top: 15px;
-  background-color: #00381abb;
+  background: linear-gradient(-45deg, #002b02, #033900e4, #002b02);
   padding: 10px;
   width: 85%;
 
@@ -277,7 +255,7 @@
 
 @media screen and (max-width: 1140px) {
   .cover {
-    height: 490px;
+    height: 650px;
   }
 
   .choose-container {
@@ -306,12 +284,17 @@
   }
 }
 
+/*
+
+  }*/
+
 @media screen and (max-width: 780px) {
+
   .cover {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     padding: 12px;
-    height: 68vh;
+    height:610px;
     margin-bottom: 10px;
   }
 
